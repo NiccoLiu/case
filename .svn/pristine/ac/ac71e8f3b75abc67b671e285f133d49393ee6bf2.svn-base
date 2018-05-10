@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+     xmlns:context="http://www.springframework.org/schema/context"  
+     xmlns:p="http://www.springframework.org/schema/p"  
+     xmlns:mvc="http://www.springframework.org/schema/mvc"  
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+          http://www.springframework.org/schema/context  
+          http://www.springframework.org/schema/context/spring-context.xsd  
+          http://www.springframework.org/schema/mvc  
+          http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+		 
+	  
+  	<!-- 创建SqlSessionFactory，同时指定数据源
+  	<property name="mapperLocations" value="classpath:com/tbs/mapper/User.xml" /> -->   
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	     <property name="dataSource" ref="dataSource" /> 
+	     <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	  <!-- 所有配置的mapper文件 -->
+     	 <property name="mapperLocations" value="classpath*:com/sm/mapper/*.xml" /> 
+   </bean>    
+   
+  <!-- scan for mappers and let them be autowired  -->
+   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	 <property name="basePackage" value="com.sm.mapper" />
+  </bean> 
+  <bean id="adminMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	  <property name="mapperInterface" value="com.sm.mapper.AdminMapper" />
+	  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>	
+  <bean id="caselogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	  <property name="mapperInterface" value="com.sm.mapper.CaseLogMapper" />
+	  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>	
+  <bean id="caseNewMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	  <property name="mapperInterface" value="com.sm.mapper.CaseNewMapper" />
+	  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>	
+  <bean id="caseMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	  <property name="mapperInterface" value="com.sm.mapper.CaseMapper" />
+	  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>	
+  <bean id="departmentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	  <property name="mapperInterface" value="com.sm.mapper.DepartmentMapper" />
+	  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>	
+  <bean id="diseaseMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	  <property name="mapperInterface" value="com.sm.mapper.DiseaseMapper" />
+	  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>	
+  <bean id="doctorMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	  <property name="mapperInterface" value="com.sm.mapper.DoctorMapper" />
+	  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>	
+  <bean id="suffererMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	  <property name="mapperInterface" value="com.sm.mapper.SuffererMapper" />
+	  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>	
+  <bean id="templateMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	  <property name="mapperInterface" value="com.sm.mapper.TemplateMapper" />
+	  <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>	
+	<!-- 启动包扫描功能，以便注册带有@Controller、@Service、@repository、@Component等注解的类成为spring的bean -->  
+      <context:component-scan base-package="com.sm.service"></context:component-scan>
+  	<!-- 启动注解驱动的Spring MVC功能，注册请求url和注解POJO类方法的映射-->  
+      <mvc:annotation-driven />  
+ </beans>

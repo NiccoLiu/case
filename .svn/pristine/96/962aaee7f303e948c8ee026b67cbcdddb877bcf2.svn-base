@@ -1,0 +1,12 @@
+package com.sm.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import com.sm.service.IDiseaseService;
+
+@Controller
+public class DiseaseController {
+	@Autowired
+	IDiseaseService diseaseService;
+}

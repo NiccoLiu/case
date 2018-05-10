@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sm.mapper.CaseLogMapper">
+	
+	
+	<select id="getList" parameterType="Map" resultType="Map">
+		select 
+		   l.id,
+		   l.case_id,
+		   l.log_case_id,
+		   l.log_remark,
+		   l.upate_time
+		from case_log l
+		where 1=1
+		<if test=" id!=null and id!=''">
+		  and  l.id=#{id}
+		</if>
+		<if test=" case_id!=null and case_id!=''">
+		  and  l.case_id=#{case_id}
+		</if>
+		<if test=" log_remark!=null and log_remark!=''">
+		  and  l.log_remark=#{log_remark}
+		</if>
+		<if test=" upate_time!=null and upate_time!=''">
+		  and  l.upate_time=#{upate_time}
+		</if>
+	</select>
+	<insert id="insert" parameterType="Map">
+		insert into case_log(
+		   id,
+		   case_id,
+		   log_case_id,
+		   log_remark,
+		   upate_time
+		)values(
+		   #{id},
+		   #{case_id},
+		   #{log_case_id},
+		   #{log_remark},
+		   now()
+		)
+	</insert>
+</mapper>	

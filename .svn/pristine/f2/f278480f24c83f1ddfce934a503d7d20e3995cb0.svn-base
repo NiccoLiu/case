@@ -1,0 +1,168 @@
+package com.sm.controller;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.sm.service.IAdminService;
+import com.sm.util.GeneratetwoDimensionalcode;
+
+@Controller
+public class AdminController {
+	
+	@Autowired
+	IAdminService adminService;
+	
+	@RequestMapping("admin/goIndex.do")	
+	public ModelAndView goIndex(HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("../index.jsp");
+		String imgPath = request.getSession().getServletContext()
+				.getRealPath("/")+ "userTowcode/";
+		File dir = new File(imgPath);
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
+		String destImagePath = imgPath + "/mobile.jpg"; // 浜岀淮鐮佺敓鎴愮殑鍦板潃
+		File f = new File(destImagePath);
+		if (!f.exists()) {
+			try {
+				f.createNewFile();
+				String contextPath = request.getContextPath();  
+				String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+contextPath+"/";
+				GeneratetwoDimensionalcode.encode(basePath+"appLogin.jsp", 100, 100,destImagePath);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		mav.addObject("two", request.getContextPath()+"/userTowcode/mobile.jpg");
+		return mav;
+	}
+	
+	@RequestMapping("admin/login.do")	
+	public ModelAndView insert(String userName,String userPwd,String userRole,HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("../login.jsp");
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("account", userName);
+		map.put("pwd", userPwd);
+		if(userRole.equals("1")){
+			Integer count = adminService.getAdmin(map);
+			if(count>0){
+				request.getSession().setAttribute("account", userName);
+				mav=new ModelAndView(new RedirectView("./index.jsp"));				
+			}else{
+				mav.addObject("msg", "用户名和密码错误!");
+			}
+		}else if(userRole.equals("2")){
+			Integer count = adminService.getSuper(map);
+			if(count>0){
+				request.getSession().setAttribute("account", userName);
+				map.put("sup_account", userName);
+				//request.getSession().setAttribute("sup_id", supervisService.getOne(map).get("sup_id"));
+				mav=new ModelAndView(new RedirectView("../supervisor/index.jsp"));				
+			}else{
+				mav.addObject("msg", "");
+			}
+		}else if(userRole.equals("3")){
+			Integer count = adminService.getTeacher(map);
+			if(count>0){
+				map.put("tea_account", userName);
+				//request.getSession().setAttribute("tea_id", teacherService.getOne(map).get("tea_id"));
+				mav=new ModelAndView(new RedirectView("../teacher/index.jsp"));			
+			}else{
+				mav.addObject("msg", "");
+			}
+		}
+		return mav;
+	}
+	@RequestMapping("admin/appLogout.do")	
+	public ModelAndView appLogout(HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("../appLogin.jsp");
+		request.getSession().removeAttribute("account");
+		return mav;
+	}
+	@RequestMapping("admin/pwd.do")	
+	public ModelAndView pwd(HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("./myinfo/pwd.jsp");
+		Object account=request.getSession().getAttribute("account");
+		mav.addObject("admin", adminService.getAdminMap(account.toString()));
+		return mav;
+	}
+	@RequestMapping("admin/pwdOk.do")
+	public ModelAndView pwdOk(String adNewPwd,String adId,HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("redirect:/admin/pwd.do");
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("id", adId);
+		map.put("admin_pwd", adNewPwd);
+		adminService.update(map);
+		return mav;
+	}
+	@RequestMapping("admin/info.do")	
+	public ModelAndView info(HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("./myinfo/info.jsp");
+		Object account=request.getSession().getAttribute("account");
+		mav.addObject("admin", adminService.getAdminMap(account.toString()));
+		return mav;
+	}
+	@RequestMapping("admin/infoOk.do")
+	public ModelAndView infoOk(String id,String admin_name,HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("redirect:/admin/info.do");
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("admin_name", admin_name);
+		adminService.update(map);
+		mav.addObject("msg", "");
+		return mav;
+	}
+	//------------------------app鐧诲綍---------------------------------
+	@RequestMapping("admin/appLogin.do")	
+	public ModelAndView appLogin(String userName,String userPwd,String userRole,HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("../appLogin.jsp");
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("account", userName);
+		map.put("pwd", userPwd);
+		if(userRole.equals("2")){
+			Integer count = adminService.getSuper(map);
+			if(count>0){
+				request.getSession().setAttribute("account", userName);
+				map.put("sup_account", userName);
+				//request.getSession().setAttribute("sup_id", supervisService.getOne(map).get("sup_id"));//璁剧疆鐫ｅ涓撳鍒皊hession
+				mav=new ModelAndView(new RedirectView("../mobile/supervisor/index.jsp"));				
+			}else{
+				mav.addObject("msg", "");
+			}
+		}else if(userRole.equals("3")){
+			Integer count = adminService.getTeacher(map);
+			if(count>0){
+				map.put("tea_account", userName);
+				//request.getSession().setAttribute("tea_id", teacherService.getOne(map).get("tea_id"));//璁剧疆璇勪环鑰佸笀鍒皊hession
+				mav=new ModelAndView(new RedirectView("../mobile/teacher/index.jsp"));			
+			}else{
+				mav.addObject("msg", "");
+			}
+		}else if(userRole.equals("4")){
+			Integer count = adminService.getStudent(map);
+			if(count>0){
+				map.put("stu_account", userName);
+				//request.getSession().setAttribute("stu_id", teacherService.getOne(map).get("stu_id"));//璁剧疆瀛︾敓鍒皊hession
+				mav=new ModelAndView(new RedirectView("../mobile/student/index.jsp"));			
+			}else{
+				mav.addObject("msg", "");
+			}
+		}
+		return mav;
+	}
+	@RequestMapping("admin/logout.do")	
+	public ModelAndView logout(HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("../login.jsp");
+		request.getSession().removeAttribute("account");
+		return mav;
+	}
+}

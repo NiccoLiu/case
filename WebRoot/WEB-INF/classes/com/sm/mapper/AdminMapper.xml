@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sm.mapper.AdminMapper">
+	
+	
+	<select id="getAdmin" parameterType="Map" resultType="Integer">
+		select count(*)  from admin where admin_account=#{account} and admin_pwd=#{pwd}
+	</select>
+	<select id="getAdminMap" parameterType="String" resultType="Map">
+		select *  from admin where admin_account=#{account}
+	</select>
+	<update id="update" parameterType="Map">
+		update admin
+		set
+		<if test="admin_account!=null and admin_account!=''">
+		admin_account=#{admin_account},
+		</if>
+		<if test="admin_pwd!=null and admin_pwd!=''">
+		admin_pwd=#{admin_pwd},
+		</if>
+		<if test="admin_name!=null and admin_name!=''">
+		admin_name=#{admin_name},
+		</if>
+		id=#{id}
+		where
+		id=#{id}
+	</update>
+	<select id="getList" parameterType="Map" resultType="Map">
+		SELECT 
+			a.`id`,
+			a.`admin_name`,
+			a.`admin_account`,
+			a.`admin_pwd`
+		FROM admin a
+		WHERE 1=1
+			<if test="id!=null and id!=''">
+				and a.id=#{id}
+			</if>
+			<if test="admin_account!=null and admin_account!=''">
+				and a.admin_account like '%${admin_account}%'
+			</if>
+			<if test="admin_pwd!=null and admin_pwd!=''">
+				and a.admin_pwd=#{admin_pwd}
+			</if>
+			<if test="admin_name!=null and admin_name!=''">
+				and a.admin_name=#{admin_name}
+			</if>
+	</select>
+	<insert id="insert" parameterType="Map">
+		INSERT INTO `admin` (
+		  `id`,
+		  `admin_name`,
+		  `admin_account`,
+		  `admin_pwd`
+		)
+		VALUES
+		  (
+		    #{id},
+		    #{admin_name},
+		    #{admin_account},
+		    #{admin_pwd}
+		  );
+	</insert>
+	<delete id="delete" parameterType="String">
+		DELETE FROM admin WHERE id=#{param1}
+	</delete>
+</mapper>	

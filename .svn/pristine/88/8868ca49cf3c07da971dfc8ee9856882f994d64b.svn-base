@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sm.mapper.CaseNewMapper">
+	
+	
+	<select id="getList" parameterType="Map" resultType="Map">
+		select 
+		   c.id,
+		   c.case_id,
+		   se.case_no as case_no_new,
+		   c.case_no,
+		   c.suf_id,
+		   s.suf_name,
+		   s.suf_card,
+		   c.doc_id,
+		   d.doc_name,
+		   d.doc_title,
+		   c.dep_id,
+		   p.dep_name,
+		   c.tem_id,
+		   t.tem_name,
+		   c.des_id,
+		   e.des_name,
+		   c.hos_no,
+		   c.hos_data,
+		   c.diagnose_sug,
+		   c.process,
+		   c.deal_sug,
+		   c.diagnose_result,
+		   c.create_time
+		from `case_new` c left join sufferer s on c.suf_id=s.id
+		left join `case` se on se.id=c.case_id
+		left join doctor d on c.doc_id=d.id
+		left join department p on c.dep_id=p.id
+		left join template t on c.tem_id=t.id
+		left join disease e on c.des_id=e.id
+		where 1=1
+		<if test=" id!=null and id!=''">
+		  and  c.id=#{id}
+		</if>
+		<if test=" case_no!=null and case_no!=''">
+		  and  c.case_no=#{case_no}
+		</if>
+		<if test=" suf_id!=null and suf_id!=''">
+		  and  c.suf_id=#{suf_id}
+		</if>
+		<if test=" suf_name!=null and suf_name!=''">
+		  and  s.suf_name like '%${suf_name}%' 
+		</if>
+		<if test=" suf_card!=null and suf_card!=''">
+		  and  s.suf_card like '%${suf_card}%' 
+		</if>
+		<if test=" doc_id!=null and doc_id!=''">
+		  and  c.doc_id=#{doc_id}
+		</if>
+		<if test=" dep_id!=null and dep_id!=''">
+		  and  c.dep_id=#{dep_id}
+		</if>
+		<if test=" tem_id!=null and tem_id!=''">
+		  and  c.tem_id=#{tem_id}
+		</if>
+		<if test=" des_id!=null and des_id!=''">
+		  and  c.des_id=#{des_id}
+		</if>
+		<if test=" hos_no!=null and hos_no!=''">
+		  and  c.hos_no=#{hos_no}
+		</if>
+		<if test=" hos_data!=null and hos_data!=''">
+		  and  c.hos_data=#{hos_data}
+		</if>
+		<if test=" diagnose_sug!=null and diagnose_sug!=''">
+		  and  c.diagnose_sug=#{diagnose_sug}
+		</if>
+		<if test=" process!=null and process!=''">
+		  and  c.process=#{process}
+		</if>
+		<if test=" deal_sug!=null and deal_sug!=''">
+		  and  c.deal_sug=#{deal_sug}
+		</if>
+		<if test=" diagnose_result!=null and diagnose_result!=''">
+		  and  c.diagnose_result=#{diagnose_result}
+		</if>
+		<if test=" create_time!=null and create_time!=''">
+		  and  c.create_time=#{create_time}
+		</if>
+	</select>
+	<insert id="insert" parameterType="Map">
+		insert into `case_new`(
+		   id,
+		   case_id,
+		   case_no,
+		   suf_id,
+		   doc_id,
+		   dep_id,
+		   tem_id,
+		   des_id,
+		   hos_no,
+		   hos_data,
+		   diagnose_sug,
+		   process,
+		   deal_sug,
+		   diagnose_result,
+		   create_time
+		)values(
+		   #{id},
+		   #{case_id},
+		   #{case_no},
+		   #{suf_id},
+		   #{doc_id},
+		   #{dep_id},
+		   #{tem_id},
+		   #{des_id},
+		   #{hos_no},
+		   #{hos_data},
+		   #{diagnose_sug},
+		   #{process},
+		   #{deal_sug},
+		   #{diagnose_result},
+		   now()
+		)
+	</insert>
+	<update id="update" parameterType="Map">
+		update `case_new`
+		set
+		<if test="case_id!=null and case_id!=''">
+		case_id=#{case_id},
+		</if>
+		<if test="case_no!=null and case_no!=''">
+		case_no=#{case_no},
+		</if>
+		<if test="suf_id!=null and suf_id!=''">
+		suf_id=#{suf_id},
+		</if>
+		<if test="doc_id!=null and doc_id!=''">
+		doc_id=#{doc_id},
+		</if>
+		<if test="dep_id!=null and dep_id!=''">
+		dep_id=#{dep_id},
+		</if>
+		<if test="tem_id!=null and tem_id!=''">
+		tem_id=#{tem_id},
+		</if>
+		<if test="des_id!=null and des_id!=''">
+		des_id=#{des_id},
+		</if>
+		<if test="hos_no!=null and hos_no!=''">
+		hos_no=#{hos_no},
+		</if>
+		<if test="hos_data!=null and hos_data!=''">
+		hos_data=#{hos_data},
+		</if>
+		<if test="diagnose_sug!=null and diagnose_sug!=''">
+		diagnose_sug=#{diagnose_sug},
+		</if>
+		<if test="process!=null and process!=''">
+		process=#{process},
+		</if>
+		<if test="deal_sug!=null and deal_sug!=''">
+		deal_sug=#{deal_sug},
+		</if>
+		<if test="diagnose_result!=null and diagnose_result!=''">
+		diagnose_result=#{diagnose_result},
+		</if>
+		<if test="create_time!=null and create_time!=''">
+		create_time=#{create_time},
+		</if>
+		id=#{id}
+		where
+		id=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		delete from `case_new` where id=#{id}
+	</delete>
+</mapper>	

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sm.mapper.SuffererMapper">
+	
+	
+	<select id="getList" parameterType="Map" resultType="Map">
+		select 
+		   s.id,
+		   s.suf_name,
+		   s.suf_sex,
+		   s.suf_age,
+		   s.suf_his,
+		   s.suf_card,
+		   s.doc_id,
+		   d.doc_name,
+		   d.doc_title,
+		   s.suf_address,
+		   s.suf_phone,
+		   s.suf_nation,
+		   s.suf_native
+		from sufferer s left join doctor d on s.doc_id=d.id
+		where 1=1
+		<if test=" id!=null and id!=''">
+		  and  s.id=#{id}
+		</if>
+		<if test=" suf_name!=null and suf_name!=''">
+		  and  s.suf_name=#{suf_name}
+		</if>
+		<if test=" suf_sex!=null and suf_sex!=''">
+		  and  s.suf_sex=#{suf_sex}
+		</if>
+		<if test=" suf_age!=null and suf_age!=''">
+		  and  s.suf_age=#{suf_age}
+		</if>
+		<if test=" suf_his!=null and suf_his!=''">
+		  and  s.suf_his=#{suf_his}
+		</if>
+		<if test=" suf_card!=null and suf_card!=''">
+		  and  s.suf_card=#{suf_card}
+		</if>
+		<if test=" doc_id!=null and doc_id!=''">
+		  and  s.doc_id=#{doc_id}
+		</if>
+		<if test=" doc_name!=null and doc_name!=''">
+		  and  d.doc_name=#{doc_name}
+		</if>
+		<if test=" suf_address!=null and suf_address!=''">
+		  and  s.suf_address=#{suf_address}
+		</if>
+		<if test=" suf_phone!=null and suf_phone!=''">
+		  and  s.suf_phone=#{suf_phone}
+		</if>
+		<if test=" suf_nation!=null and suf_nation!=''">
+		  and  s.suf_nation=#{suf_nation}
+		</if>
+		<if test=" suf_native!=null and suf_native!=''">
+		  and  s.suf_native=#{suf_native}
+		</if>
+	</select>
+	<insert id="insert" parameterType="Map">
+		insert into sufferer(
+		   id,
+		   suf_name,
+		   suf_sex,
+		   suf_age,
+		   suf_his,
+		   suf_card,
+		   doc_id,
+		   suf_address,
+		   suf_phone,
+		   suf_nation,
+		   suf_native
+		)values(
+		   #{id},
+		   #{suf_name},
+		   #{suf_sex},
+		   #{suf_age},
+		   #{suf_his},
+		   #{suf_card},
+		   #{doc_id},
+		   #{suf_address},
+		   #{suf_phone},
+		   #{suf_nation},
+		   #{suf_native}
+		)
+	</insert>
+	<update id="update" parameterType="Map">
+		update sufferer
+		set
+		<if test=" suf_name!=null and suf_name!=''">
+		 suf_name=#{suf_name},
+		</if>
+		<if test=" suf_sex!=null and suf_sex!=''">
+		 suf_sex=#{suf_sex},
+		</if>
+		<if test=" suf_age!=null and suf_age!=''">
+		 suf_age=#{suf_age},
+		</if>
+		<if test=" suf_his!=null and suf_his!=''">
+		 suf_his=#{suf_his},
+		</if>
+		<if test=" suf_card!=null and suf_card!=''">
+		 suf_card=#{suf_card},
+		</if>
+		<if test=" doc_id!=null and doc_id!=''">
+		 doc_id=#{doc_id},
+		</if>
+		<if test=" suf_address!=null and suf_address!=''">
+		 suf_address=#{suf_address},
+		</if>
+		<if test=" suf_phone!=null and suf_phone!=''">
+		 suf_phone=#{suf_phone},
+		</if>
+		<if test=" suf_nation!=null and suf_nation!=''">
+		 suf_nation=#{suf_nation},
+		</if>
+		<if test=" suf_native!=null and suf_native!=''">
+		 suf_native=#{suf_native},
+		</if>
+		id=#{id}
+		where
+		id=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		delete from sufferer where id=#{id}
+	</delete>
+</mapper>	

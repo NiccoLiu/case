@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+#editor_upload .editor_tools_bar_button {
+	padding: 0;
+	margin: 0;
+}
+
+#editor_upload {
+	display: inline-block;
+	margin: 5px 0 0 5px;
+	position: static;
+}
+#insertImage .uploadify{position: relative;}
+#insertImage .uploadImagesBut{text-align: center;color:#fff}
+#insertImage .uploadify:hover .uploadImagesBut{}
+#insertImage .uploadify-button-text{display: inline;}
+#insertImage .uploadify:hover .uploadImagesBut .uploadify-button-text{display:block;}

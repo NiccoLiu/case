@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sm.mapper.TemplateMapper">
+	
+	
+	<select id="getList" parameterType="Map" resultType="Map">
+		select 
+		   t.id,
+		   t.dep_id,
+		   d.dep_name,
+		   t.tem_name,
+		   t.tem_url
+		from template t left join department d on t.dep_id=d.id
+		where 1=1
+		<if test=" id!=null and id!=''">
+		  and  t.id=#{id}
+		</if>
+		<if test="dep_id!=null and dep_id!=''">
+		  and  t.dep_id=#{dep_id}
+		</if>
+		<if test="dep_name!=null and dep_name!=''">
+		  and  d.dep_name=#{dep_name}
+		</if>
+		<if test="tem_name!=null and tem_name!=''">
+		  and  t.tem_name=#{tem_name}
+		</if>
+		<if test="tem_url!=null and tem_url!=''">
+		  and  t.tem_url=#{tem_url}
+		</if>
+	</select>
+	<insert id="insert" parameterType="Map">
+		insert into template(
+		  id,
+		  dep_id,
+		  tem_name,
+		  tem_url
+		)values(
+		  #{id},
+		  #{dep_id},
+		  #{tem_name},
+		  #{tem_url}
+		)
+	</insert>
+	<update id="update" parameterType="Map">
+		update template
+		set
+			<if test="dep_id!=null and dep_id!=''">
+			  dep_id=#{dep_id},
+			</if>
+			<if test="tem_name!=null and tem_name!=''">
+			  tem_name=#{tem_name},
+			</if>
+			<if test="tem_url!=null and tem_url!=''">
+			  tem_url=#{tem_url},
+			</if>
+			id=#{id}
+		where
+			id=#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		delete from template where id=#{id}
+	</delete>
+</mapper>	

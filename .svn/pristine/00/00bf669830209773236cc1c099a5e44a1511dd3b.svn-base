@@ -1,0 +1,13 @@
+package com.sm.mapper;
+
+import java.util.Map;
+
+public interface AdminMapper {
+	
+	public Integer getAdmin(Map<String,Object> map);
+	
+	public Map<String,Object> getAdminMap(String account);
+	
+	public void update(Map<String,Object> map);
+	
+}
